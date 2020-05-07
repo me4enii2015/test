@@ -1,0 +1,28 @@
+provider "google" {
+  credentials = "${file("${var.service_account_vm}")}"
+  project = "${var.terraform_vm}"
+  region = "${var.region_vm}"
+  zone = "${var.zone_vm}"
+}
+
+resource "google_compute_instance" "vm_instance" {
+  name = "${var.instance_name_vm}"
+  machine_type = "${var.machine_type_vm}"
+
+  boot_disk {
+    initialize_params {
+      image = "${var.image_vm}"
+    }
+  }
+
+  network_interface {
+    network = "${google_compute_network.vpc_network.self_link}"
+    access_config {
+    }
+  }
+}
+
+resource "google_compute_network" "vpc_network" {
+  name = "${var.networkname_vm}"
+  auto_create_subnetworks = "true"
+}
