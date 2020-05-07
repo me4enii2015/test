@@ -1,0 +1,10 @@
+
+FROM node       
+WORKDIR /usr/share/nginx/html
+COPY . /app
+RUN rpm install
+RUN apt get update && apt get install -y nginx
+RUN  npm run ng build -- --output-path=dist
+ARG BUILD CODE_VERSION=latest
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
